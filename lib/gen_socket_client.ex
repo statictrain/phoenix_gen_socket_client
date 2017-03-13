@@ -129,6 +129,9 @@ defmodule Phoenix.Channels.GenSocketClient do
   @doc "Invoked to handle an Erlang message."
   @callback handle_info(message::any, transport, callback_state) :: handler_response
 
+  @doc "Invoked to handle Erlang GenServer calls."
+  @callback handle_call(message::any, transport, callback_state) :: handler_response
+
 
   # -------------------------------------------------------------------
   # API functions
@@ -238,6 +241,10 @@ defmodule Phoenix.Channels.GenSocketClient do
   end
   def handle_info(message, state) do
     invoke_callback(state, :handle_info, [message, transport(state)])
+  end
+
+  def handle_call(message, _from, state) do
+    invoke_callback(state, :handle_call, [message, transport(state)])
   end
 
 
