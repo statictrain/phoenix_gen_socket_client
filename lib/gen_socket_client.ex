@@ -244,9 +244,9 @@ defmodule Phoenix.Channels.GenSocketClient do
   end
 
   def handle_call(message, _from, state) do
-    invoke_callback(state, :handle_call, [message, transport(state)])
+    {callback_response, callback_state} = apply(state.callback, :handle_call, [message, transport(state), state.callback_state])
+    {:reply, callback_response, %{state | callback_state: callback_state}}
   end
-
 
   # -------------------------------------------------------------------
   # Handling of Phoenix messages
